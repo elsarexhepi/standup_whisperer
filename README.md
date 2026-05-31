@@ -11,11 +11,13 @@ Copy the result as clean text or Slack-formatted markdown optimized for team sta
 ## Setup
 Clone the repo and run:
 
-npm install
-npm run dev
+```bash
+pnpm install
 
-App should work immediately after adding API key.
+cd artifacts/standup-whisperer
 
+PORT=3000 BASE_PATH=/ pnpm run dev
+```
 ## Future improvements
 
 - Slack API integration
