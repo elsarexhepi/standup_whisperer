@@ -15,7 +15,7 @@ A web app that turns messy workday notes into structured standup updates using O
 - pnpm workspaces, Node.js 24, TypeScript 5.9
 - Frontend: React + Vite + Tailwind CSS
 - API: Express 5
-- AI: OpenAI gpt-4o-mini (chat completions, JSON mode)
+- AI: Google Gemini 2.0 Flash (via `@google/generative-ai`, JSON mode)
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
@@ -49,7 +49,7 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 - `BASE_URL` from `import.meta.env.BASE_URL` must be used as a prefix for all API calls in the frontend — bare `/api/...` paths bypass the Replit proxy
 - After changing `openapi.yaml`, always run `pnpm --filter @workspace/api-spec run codegen` before using new types
-- `OPENAI_API_KEY` must be set as a Replit Secret — the API server throws at startup if it's missing
+- `GEMINI_API_KEY` must be set as a Replit Secret — the API server throws at startup if it's missing
 
 ## Pointers
 
