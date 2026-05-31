@@ -1,30 +1,16 @@
 import { Router } from "express";
 import { GenerateStandupBody } from "@workspace/api-zod";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
 const router = Router();
 
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error("GEMINI_API_KEY environment variable is required");
+if (!process.env.OPENROUTER_API_KEY) {
+  throw new Error("OPENROUTER_API_KEY environment variable is required");
 }
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash",
-  generationConfig: {
-    responseMimeType: "application/json",
-    maxOutputTokens: 1024,
-  },
-  systemInstruction: `You are a helpful assistant that converts messy work notes into a structured standup update.
-Extract information from the notes and organize them into exactly three sections:
-1. Yesterday - what was accomplished
-2. Today - what is planned
-3. Blockers - any impediments or blockers (if none, say "No blockers")
-
-Respond ONLY with a JSON object with keys "yesterday", "today", and "blockers".
-Each value should be a clear, concise bullet-point list using "- " prefix for each item.
-Keep the tone professional and concise. Do not include any other text outside the JSON.`,
+const openai = new OpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: "https://openrouter.ai/api/v1",
 });
 
 router.post("/standup/generate", async (req, res) => {
@@ -37,9 +23,31 @@ router.post("/standup/generate", async (req, res) => {
   const { notes } = parsed.data;
 
   try {
-    const result = await model.generateContent(`Here are my work notes:\n\n${notes}`);
-    const content = result.response.text();
+    const completion = await openai.chat.completions.create({
+      model: "google/gemini-2.0-flash-001",
+      max_tokens: 1024,
+      messages: [
+        {
+          role: "system",
+          content: `You are a helpful assistant that converts messy work notes into a structured standup update.
+Extract information from the notes and organize them into exactly three sections:
+1. Yesterday - what was accomplished
+2. Today - what is planned
+3. Blockers - any impediments or blockers (if none, say "No blockers")
 
+Respond ONLY with a JSON object with keys "yesterday", "today", and "blockers".
+Each value should be a clear, concise bullet-point list using "- " prefix for each item.
+Keep the tone professional and concise. Do not include any other text outside the JSON.`,
+        },
+        {
+          role: "user",
+          content: `Here are my work notes:\n\n${notes}`,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const content = completion.choices[0]?.message?.content;
     if (!content) {
       res.status(500).json({ error: "No response from AI" });
       return;
