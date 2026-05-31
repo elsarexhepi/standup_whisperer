@@ -1,6 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
-@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -70,60 +70,50 @@
 }
 
 :root {
-  --button-outline: rgba(0,0,0,.10);
-  --badge-outline: rgba(0,0,0,.05);
   --opaque-button-border-intensity: -8;
-  --elevate-1: rgba(0,0,0,.03);
-  --elevate-2: rgba(0,0,0,.08);
 
-  /* Indigo-violet palette — professional, modern */
-  --background: 240 10% 97%;
-  --foreground: 240 15% 12%;
-  --border: 240 8% 88%;
+  --background: 230 20% 96%;
+  --foreground: 230 25% 10%;
+  --border: 230 15% 88%;
   --card: 0 0% 100%;
-  --card-foreground: 240 15% 12%;
-  --card-border: 240 8% 90%;
-  --sidebar: 240 12% 95%;
-  --sidebar-foreground: 240 15% 12%;
-  --sidebar-border: 240 8% 88%;
-  --sidebar-primary: 245 75% 58%;
+  --card-foreground: 230 25% 10%;
+  --card-border: 230 15% 91%;
+  --sidebar: 230 18% 93%;
+  --sidebar-foreground: 230 25% 10%;
+  --sidebar-border: 230 15% 88%;
+  --sidebar-primary: 248 80% 60%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 245 20% 92%;
-  --sidebar-accent-foreground: 240 15% 12%;
-  --sidebar-ring: 245 75% 58%;
+  --sidebar-accent: 248 25% 92%;
+  --sidebar-accent-foreground: 230 25% 10%;
+  --sidebar-ring: 248 80% 60%;
   --popover: 0 0% 100%;
-  --popover-foreground: 240 15% 12%;
-  --popover-border: 240 8% 88%;
-  --primary: 245 75% 58%;
+  --popover-foreground: 230 25% 10%;
+  --popover-border: 230 15% 88%;
+  --primary: 248 80% 60%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 245 20% 92%;
-  --secondary-foreground: 240 15% 12%;
-  --muted: 240 10% 94%;
-  --muted-foreground: 240 8% 50%;
-  --accent: 245 60% 95%;
-  --accent-foreground: 245 75% 42%;
-  --destructive: 0 72% 55%;
+  --secondary: 248 25% 93%;
+  --secondary-foreground: 230 25% 10%;
+  --muted: 230 15% 93%;
+  --muted-foreground: 230 10% 48%;
+  --accent: 248 70% 96%;
+  --accent-foreground: 248 80% 44%;
+  --destructive: 4 74% 56%;
   --destructive-foreground: 0 0% 100%;
-  --success: 142 72% 40%;
+  --success: 152 60% 40%;
   --success-foreground: 0 0% 100%;
-  --input: 240 8% 82%;
-  --ring: 245 75% 58%;
-  --chart-1: 245 75% 58%;
+  --input: 230 12% 84%;
+  --ring: 248 80% 60%;
+
+  --chart-1: 248 80% 60%;
   --chart-2: 210 80% 55%;
   --chart-3: 280 65% 60%;
   --chart-4: 160 65% 45%;
   --chart-5: 35 80% 55%;
 
-  --app-font-sans: 'Inter', system-ui, sans-serif;
+  --app-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: 'Fira Code', Menlo, monospace;
-  --radius: 0.625rem;
-
-  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
-  --shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.08);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.06);
-  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.05);
+  --radius: 0.75rem;
 
   --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
   --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
@@ -143,18 +133,42 @@
   }
 }
 
+/* ── Shimmer skeleton ── */
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }
-
 .shimmer {
   background: linear-gradient(
     90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--border)) 50%,
-    hsl(var(--muted)) 75%
+    hsl(var(--muted))   25%,
+    hsl(var(--border))  50%,
+    hsl(var(--muted))   75%
   );
   background-size: 200% auto;
-  animation: shimmer 1.5s linear infinite;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* ── Fade-in for result card ── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-slide-in {
+  animation: fadeSlideIn 0.35s ease-out both;
+}
+
+/* ── Mesh gradient background ── */
+.bg-mesh {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, hsla(248,80%,68%,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80%  110%, hsla(210,80%,65%,.08) 0%, transparent 60%);
+}
+
+/* ── Textarea focus ring ── */
+.notes-textarea:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px hsl(var(--ring) / 0.25);
 }

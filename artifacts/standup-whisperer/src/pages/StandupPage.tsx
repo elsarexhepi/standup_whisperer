@@ -61,10 +61,24 @@ export default function StandupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-mesh">
       <Header />
-      <main className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="space-y-6">
+
+      <main className="max-w-3xl mx-auto px-5 pt-10 pb-16 sm:px-6">
+        {/* Hero */}
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
+            Turn messy notes into{" "}
+            <span className="bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
+              clean standups
+            </span>
+          </h1>
+          <p className="mt-3 text-base text-muted-foreground max-w-md mx-auto">
+            Paste anything from your workday — the AI organises it into Yesterday, Today, and Blockers in seconds.
+          </p>
+        </div>
+
+        <div className="space-y-5">
           <NotesInput
             notes={notes}
             onChange={setNotes}
