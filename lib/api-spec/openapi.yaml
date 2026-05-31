@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: standup
+    description: Standup generation operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /standup/generate:
+    post:
+      operationId: generateStandup
+      tags: [standup]
+      summary: Generate standup update
+      description: Takes messy notes and generates a structured standup update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StandupInput"
+      responses:
+        "200":
+          description: Generated standup
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandupOutput"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +66,35 @@ components:
           type: string
       required:
         - status
-
+    StandupInput:
+      type: object
+      properties:
+        notes:
+          type: string
+          description: Raw messy notes from the workday
+          minLength: 1
+      required:
+        - notes
+    StandupOutput:
+      type: object
+      properties:
+        yesterday:
+          type: string
+          description: What was done yesterday
+        today:
+          type: string
+          description: What is planned for today
+        blockers:
+          type: string
+          description: Any blockers or impediments
+      required:
+        - yesterday
+        - today
+        - blockers
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

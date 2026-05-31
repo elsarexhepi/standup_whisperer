@@ -1,36 +1,45 @@
-# [Project name]
+# Standup Whisperer
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A web app that turns messy workday notes into structured standup updates using OpenAI.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080)
+- `pnpm --filter @workspace/standup-whisperer run dev` — run the frontend (port 25035)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
+- Frontend: React + Vite + Tailwind CSS
 - API: Express 5
-- DB: PostgreSQL + Drizzle ORM
+- AI: OpenAI gpt-4o-mini (chat completions, JSON mode)
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `lib/api-spec/openapi.yaml` — OpenAPI spec (source of truth for API contracts)
+- `lib/api-client-react/src/generated/` — generated React Query hooks
+- `lib/api-zod/src/generated/` — generated Zod schemas
+- `artifacts/api-server/src/routes/standup/index.ts` — standup generation route
+- `artifacts/standup-whisperer/src/pages/StandupPage.tsx` — main page
+- `artifacts/standup-whisperer/src/components/standup/` — UI components
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- No database needed — standup generation is stateless (notes in, standup out)
+- OpenAI JSON mode (`response_format: { type: "json_object" }`) ensures structured output
+- The API uses `gpt-4o-mini` for cost-efficiency on this simple task
+- Copy for Slack outputs emoji + bold markdown formatting for direct paste into Slack
+- Frontend calls `/api/standup/generate` using the artifact's `BASE_URL` prefix (required for Replit proxy routing)
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Users paste messy workday notes and click "Generate Standup". The AI extracts and organizes the content into Yesterday / Today / Blockers. Users can copy the result as plain text or Slack-formatted markdown.
 
 ## User preferences
 
@@ -38,7 +47,9 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- `BASE_URL` from `import.meta.env.BASE_URL` must be used as a prefix for all API calls in the frontend — bare `/api/...` paths bypass the Replit proxy
+- After changing `openapi.yaml`, always run `pnpm --filter @workspace/api-spec run codegen` before using new types
+- `OPENAI_API_KEY` must be set as a Replit Secret — the API server throws at startup if it's missing
 
 ## Pointers
 
