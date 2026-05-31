@@ -9,10 +9,12 @@ Yesterday / Today / Blockers
 Copy the result as clean text or Slack-formatted markdown optimized for team standups.
 
 ## Setup
+Clone the repo and run:
 
-## How to run
 npm install
 npm run dev
+
+App should work immediately after adding API key.
 
 ## Future improvements
 
